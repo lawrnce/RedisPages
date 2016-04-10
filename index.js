@@ -90,7 +90,7 @@ module.exports.setPages = function(params, callback) {
 var params = {
   Client: redisClient,
   Key: String,
-  Page: Int
+  Index: Int
 }
 */
 
@@ -109,15 +109,15 @@ module.exports.getPage = function(params, callback) {
   }
 
   // Get page
-  var page = params.Page;
-  var err = isValidPage(page);
+  var index = params.Index;
+  var err = isValidIndex(index);
   if (err) {
     callback(err);
     return;
   }
 
   // Get key from redis
-  client.lindex(key, page, function(err, result) {
+  client.lindex(key, index, function(err, result) {
     // Redis execution error
     if (err) {
       callback(err);
@@ -210,11 +210,11 @@ function isValidStamp(stamp) {
   }
 };
 
-// Check if valid page
-function isValidPage(page) {
-  if (Number.isInteger(page) === false) {
-    return new Error("Invalid 'Page' parameter. Not of type Integer.");
-  } else if (Number.isInteger(page) === true && page < 0) {
-    return new Error("Invalid 'Page' parameter. Cannot be negative integer.");
+// Check if valid index
+function isValidIndex(index) {
+  if (Number.isInteger(index) === false) {
+    return new Error("Invalid 'Index' parameter. Not of type Integer.");
+  } else if (Number.isInteger(index) === true && index < 0) {
+    return new Error("Invalid 'Index' parameter. Cannot be negative integer.");
   }
 }
