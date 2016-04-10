@@ -125,6 +125,7 @@ module.exports.getPage = function(params, callback) {
     // Redis success
     } else {
       callback(null, result);
+      return;
     }
   });
 };
@@ -171,6 +172,7 @@ module.exports.deletePages = function(params, callback) {
     // Redis success
     } else {
       callback(null, result);
+      return;
     }
   });
 };
@@ -200,7 +202,6 @@ function isValidKey(key) {
     return new Error("Invalid 'Key' parameter. Not of type String.");
   }
 };
-
 
 // Check if valid stamp
 function isValidStamp(stamp) {
