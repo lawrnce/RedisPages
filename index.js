@@ -17,42 +17,36 @@ module.exports.setPages = function(params, callback) {
 
   // Get items
   var items = params.Items;
-  // Check if valid array
-  if (Array.isArray(items) == false) {
-    callback(new Error("Invalid 'Items' parameter. Not of type array."));
-    return;
-  } else if (items === null) {
-    callback(new Error("Empty 'Items' parameter is not valid."));
+  var err = isValidItems(items);
+  if (err) {
+    callback(err);
     return;
   }
 
   // Get items per page
   var itemsPerPage = params.ItemsPerPage;
-  // Check if valid int
-  if (Number.isInteger(itemsPerPage) == false){
-    callback(new Error("Invalid 'ItemsPerPage' parameter. Not of type integer."))
-    return;
-    // Check if int is valid
-  } else if (itemsPerPage < -1 || itemsPerPage === 0) {
-    callback(new Error("Invalid 'ItemsPerPage' value. Must be a positive integer. -1 denotes all items in one page."));
+  var err = isValidItemsPerPage(itemsPerPage);
+  if (err) {
+    callback(err);
     return;
   }
 
   // Get key
   var key = params.Key;
-  // Check if valid key
-  if (typeof key != "string") {
-    callback(new Error("Invalid 'Key' parameter. Not of type String."))
+  var err = isValidKey(key);
+  if (err) {
+    callback(err);
     return;
   }
 
   // Get stamp
   var stamp = params.Index;
-  // Check if valid stamp
-  if (typeof key !== "string" || typeof key !== "number") {
-    callback(new Error("Invalid 'Stamp' parameter. Not of type String or Number."))
+  var err = isValidStamp(stamp);
+  if (err) {
+    callback(err);
     return;
   }
+
   var pages = Math.ceil(parseFloat(items) / itemsPerPage);
   if (stamp !== null) {
     key = key + ':' + stamp;
@@ -82,9 +76,11 @@ module.exports.setPages = function(params, callback) {
     // Redis execution error
     if (err) {
       callback(err);
+      return;
       // Redis success
     } else {
       callback(null, true);
+      return;
     }
   });
 };
@@ -146,10 +142,34 @@ module.exports.deletePages = function(params, callback) {
 
 // Error handling
 // Check if items is a valid array
-isValidItems(items) {
+function isValidItems(items) {
   if (Array.isArray(items) === false) {
     return new Error("Invalid 'Items' parameter. Not of type array.");
   } else if (items === null) {
     return new Error("Empty 'Items' parameter is not valid.");
+  }
+};
+
+// Check if items per page is valid number
+function isValidItemsPerPage(itemsPerPage) {
+  if (Number.isInteger(itemsPerPage) == false){
+    return new Error("Invalid 'ItemsPerPage' parameter. Not of type integer.")
+  } else if (itemsPerPage < -1 || itemsPerPage === 0) {
+    return new Error("Invalid 'ItemsPerPage' value. Must be a positive integer. -1 denotes all items in one page.");
+  }
+};
+
+// Check if valid key
+function isValidKey(key) {
+  if (typeof key != "string") {
+    return new Error("Invalid 'Key' parameter. Not of type String.");
+  }
+};
+
+
+// Check if valid stamp
+function isValidStamp(stamp) {
+  if (typeof stamp !== "string" || typeof stamp !== "number") {
+    return new Error("Invalid 'Stamp' parameter. Not of type String or Number.");
   }
 };
