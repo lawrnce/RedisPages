@@ -1,13 +1,14 @@
 use strict';
 
+/*
 var params = {
   Client: redisClient,
-  Items: [AnyObject],
+  Items: Array,
   ItemsPerPage: Int,
   Key: String,
   Stamp: String,
-  IndexStamp: false
 }
+*/
 
 // Set pages with key and items
 module.exports.setPages = function(params, callback) {
@@ -79,51 +80,84 @@ module.exports.setPages = function(params, callback) {
       return;
       // Redis success
     } else {
-      callback(null, true);
+      callback(null, replies);
       return;
     }
   });
 };
 
+/*
 var params = {
   Client: redisClient,
   Key: String,
   Page: Int
 }
+*/
 
 // Get page for a certain key
 module.exports.getPage = function(params, callback) {
 
   // Get Parameters
   var client = params.Client;
+
+  // Get key
   var key = params.Key;
+  var err = isValidKey(key);
+  if (err) {
+    callback(err);
+    return;
+  }
+
+  // Get page
   var page = params.Page;
+  var err = isValidPage(page);
+  if (err) {
+    callback(err);
+    return;
+  }
 
   // Get key from redis
   client.lindex(key, page, function(err, result) {
     // Redis execution error
     if (err) {
-      // Redis success
+      callback(err);
+      return;
+    // Redis success
     } else {
-
-      context.succeed(JSON.parse(result));
+      callback(null, result);
     }
   });
 };
 
+/*
 var params = {
   Client: redisClient,
   Key: String
   Stamp: String
 }
+*/
 
 // Delete pages for key
 module.exports.deletePages = function(params, callback) {
 
-  // Get parameters
   var client = params.Client;
+
+  // Get key
   var key = params.Key;
+  var err = isValidKey(key);
+  if (err) {
+    callback(err);
+    return;
+  }
+
+  // Get stamp
   var stamp = params.Stamp;
+  var err = isValidStamp(key);
+  if (err) {
+    callback(err);
+    return;
+  }
+
   if (stamp !== null) {
     key = key + ':' + stamp;
   }
@@ -132,10 +166,11 @@ module.exports.deletePages = function(params, callback) {
   client.del(key, function(err, result) {
     // Redis execution error
     if (err) {
-      // Redis success
+      callback(err);
+      return;
+    // Redis success
     } else {
-
-      context.succeed(JSON.parse(result));
+      callback(null, result);
     }
   });
 };
@@ -173,3 +208,12 @@ function isValidStamp(stamp) {
     return new Error("Invalid 'Stamp' parameter. Not of type String or Number.");
   }
 };
+
+// Check if valid page
+function isValidPage(page) {
+  if (Number.isInteger(page) === false) {
+    return new Error("Invalid 'Page' parameter. Not of type Integer.");
+  } else if (Number.isInteger(page) === true && page < 0) {
+    return new Error("Invalid 'Page' parameter. Cannot be negative integer.");
+  }
+}
