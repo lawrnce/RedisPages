@@ -1,5 +1,9 @@
 #Redis Pages
 
+<p align="center">
+<img src="/Assets/preview.gif" />
+</p>
+
 Redis pages is a simply interface for caching page based content in redis.
 
 ##Usage
