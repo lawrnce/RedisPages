@@ -1,6 +1,6 @@
 {
   "name": "redis-pages",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "An interface for caching pages in redis.",
   "main": "index.js",
   "scripts": {
