@@ -53,8 +53,7 @@ Returns a single page.
 ######Parameters
 * Client - A redis client.
 * Key - A `String` denoting the name of the item in the cache.
-* Index - An `Integer` value denoting the index of the page content. Starts from
-  0.
+* Index - An `Integer` value denoting the index of the page content. Starts from 0.
 
 ```javascript
 deletePages(params = {}, callback)
