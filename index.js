@@ -41,7 +41,7 @@ module.exports.setPages = function(params, callback) {
   }
 
   // Get stamp
-  var stamp = params.Index;
+  var stamp = params.Stamp;
   var err = isValidStamp(stamp);
   if (err) {
     callback(err);
@@ -69,7 +69,7 @@ module.exports.setPages = function(params, callback) {
         break;
       }
     }
-    multi.rpush(key, page);
+    multi.rpush(key, JSON.stringify(page));
   }
 
   // Run redis multi commands
@@ -182,8 +182,8 @@ module.exports.deletePages = function(params, callback) {
 function isValidItems(items) {
   if (Array.isArray(items) === false) {
     return new Error("Invalid 'Items' parameter. Not of type array.");
-  } else if (items === null) {
-    return new Error("Empty 'Items' parameter is not valid.");
+  } else if (items === null || items.length == 0) {
+    return new Error("Empty 'Items' parameter is not valid.");)
   }
 };
 
@@ -205,7 +205,9 @@ function isValidKey(key) {
 
 // Check if valid stamp
 function isValidStamp(stamp) {
-  if (typeof stamp !== "string" || typeof stamp !== "number") {
+  if (stamp === null) {
+    return;
+  } else if (typeof stamp != "string" && typeof stamp != "number") {
     return new Error("Invalid 'Stamp' parameter. Not of type String or Number.");
   }
 };

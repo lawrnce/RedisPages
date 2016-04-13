@@ -1,8 +1,8 @@
 {
   "name": "redis-pages",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "An interface for caching pages in redis.",
-  "main": "index.js",
+  "main": "index.js"  ,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
