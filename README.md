@@ -36,7 +36,7 @@ redisPages.setPages(params, function(err, result) {
 ```javascript
 setPages(params = {}, callback)
 ```
-Caches pages. Note currently you cannot overwrite an existing key with `setPages()`. You must call `deletePages` before doing so. Overwriting will be included in future updates.
+Caches pages. Note currently you cannot overwrite an existing key with `setPages()`. You must call `deletePages()` before doing so. Overwriting will be included in future updates.
 
 ######Parameters
 * Client - A redis client.

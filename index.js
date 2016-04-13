@@ -48,7 +48,7 @@ module.exports.setPages = function(params, callback) {
     return;
   }
 
-  var pages = Math.ceil(parseFloat(items) / itemsPerPage);
+  var pages = Math.ceil(parseFloat(items.length) / itemsPerPage);
   if (stamp !== null) {
     key = key + ':' + stamp;
   }
@@ -183,7 +183,7 @@ function isValidItems(items) {
   if (Array.isArray(items) === false) {
     return new Error("Invalid 'Items' parameter. Not of type array.");
   } else if (items === null || items.length == 0) {
-    return new Error("Empty 'Items' parameter is not valid.");)
+    return new Error("Empty 'Items' parameter is not valid.");
   }
 };
 
